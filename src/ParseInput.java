@@ -13,6 +13,7 @@ private String[] arg3m;
         arg1="";
         arg2="";
         arg3="" ;
+        arg2IsNotEmpty=0;
         countArg3AndNext=0;
         }
     public  void parseInput(String s ) throws InvalidFormatExeption {

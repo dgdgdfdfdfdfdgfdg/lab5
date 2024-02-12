@@ -14,7 +14,7 @@ public class Ticket extends ElementsWithId implements Comparable<Ticket>{
     private TicketType type; //Поле не может быть null
     private Venue venue; //Поле не может быть null
     private static final Counter counter=new Counter();
-
+    //конструктор с датой
     public Ticket(String name,Coordinates coordinates,Long price,Long discount,Boolean refundable,TicketType type,Venue venue){
 
         this.id = counter.count();
@@ -22,6 +22,21 @@ public class Ticket extends ElementsWithId implements Comparable<Ticket>{
         this.coordinates=coordinates;
         Date currentDate = new Date();
         this.creationDate=currentDate;
+        this.price=price;
+        this.discount = discount;
+        this.refundable = refundable;
+        this.type = type;
+        this.venue=venue;
+    }
+
+
+
+        //конструктор без даты
+    public Ticket(String name,Coordinates coordinates,Date creationDate,Long price,Long discount,Boolean refundable,TicketType type,Venue venue){
+        this.id = counter.count();
+        this.name= name;
+        this.coordinates=coordinates;
+        this.creationDate =creationDate;
         this.price=price;
         this.discount = discount;
         this.refundable = refundable;

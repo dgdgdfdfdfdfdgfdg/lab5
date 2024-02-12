@@ -1,5 +1,7 @@
 import java.util.Date;
-
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -7,6 +9,7 @@ public class Main {
         Console console = new Console();
         ExecutorOfComands executor =new ExecutorOfComands(collection, console);
         ParseInput parseInput = new ParseInput();
+        DumpManager.loadFromFile(collection);
 
         while (true){
             String s = console.getInput();

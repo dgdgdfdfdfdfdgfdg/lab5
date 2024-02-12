@@ -36,10 +36,8 @@ public class ExecutorOfComands {
     public void help() {
 
         String filePath = "help.txt";
-
         // Создаем объект File
         File file = new File(filePath);
-
         try {
             // Создаем объект Scanner для чтения файла
             Scanner scanner = new Scanner(file);
@@ -49,7 +47,6 @@ public class ExecutorOfComands {
                 String line = scanner.nextLine();
                 console.print(line);
             }
-
             // Закрываем Scanner после использования
             scanner.close();
         } catch (FileNotFoundException e) {
@@ -64,18 +61,9 @@ public class ExecutorOfComands {
     public void insert(String idstr, String args) {
         String[] parts = args.split(";", -1);
         //проверим аргументы
-        Long id;
-        if (Validator.validate(idstr,TypesOfArgs.Long,false)){
-            id = new Long(idstr);
-        }
-        else throw new InvalidFormatExeption("Неправильный формат ввода id должен быть числом");
-        if (collection.getHashMap().containsKey(id)) {
-            throw new InvalidFormatExeption("Неправильный формат ввода id должен быть уникальным");
-        }
+        Long id = validateId(idstr,true);
 
-        if (!Validator.validate(parts[0], TypesOfArgs.String,false)){
-            throw new InvalidFormatExeption("Имя не может быть пустым");
-        }
+
         String name = parts[0];
 
         if (!Validator.validate(parts[1], TypesOfArgs.Long,false)){
@@ -184,45 +172,69 @@ public class ExecutorOfComands {
         Coordinates coordinates = new Coordinates(x, y);
         Ticket ticket= new Ticket(name,coordinates,price,discount,refundable,ticketType,venue);
         ticket.setId(id);
-        collection.insertCollection(ticket);
+        collection.insertElement(ticket);
         collection.update();
-        System.out.println(DumpManager.convertToJson(collection.getHashMap()));
         console.print("Билет успешно введён");
     }
-    public void removeKey(String idstr,String args) {
-        Long id;
-        try {
-            id = new Long(idstr);
-        } catch (NumberFormatException e) {
-            throw new InvalidFormatExeption("Неправильный формат ввода id должен быть числом");
+
+    public  Long validateId(String idstr,boolean mustBeUnique){
+        if (!Validator.validate(idstr,TypesOfArgs.Long,false)){
+            throw new InvalidFormatExeption("Id должен быть числом");
         }
-        if (!collection.getHashMap().keySet().contains(id)) {
-            throw new InvalidFormatExeption("Нет такого id");
+        Long id = Long.parseLong(idstr);
+        String ne = mustBeUnique ? "" :" не";
+        if (!(mustBeUnique ^ collection.getHashMap().containsKey(id))) {
+            throw new InvalidFormatExeption("Неправильный формат ввода id"+ne +" должен быть уникальным");
         }
-        collection.removeElement(id);
+        return Long.parseLong(idstr);
+    }
+    public void remove_key(String idstr){
+        collection.removeElement(validateId(idstr,false));
+        console.print("Элемент удалён");
     }
 
         public void update(String idstr,String args){
-       // removeKey(id);
-
+        Long id =validateId(idstr,false);
+        Ticket ticket = collection.getElement(Long.parseLong(idstr));
+        collection.removeElement(id);
+        try {
+            insert(idstr,args);
+        }catch (InvalidFormatExeption e){
+            collection.insertElement(ticket);
+            System.out.println(e.getMessage());
+        }
     }
 
     public void exit() {
+        console.print("Завершение работы");
         System.exit(0);
     }
-
+    public void clear(){
+        collection.clearCollection();
+        console.print("Коллекция очищена");
+    }
+    public void save(){
+        DumpManager.saveToFile(collection);
+        console.print("Коллекция успешно сохранена");
+    }
     public void show() {
         if (collection.getHashMap().isEmpty()){
             console.print("Коллекция пуста");
         }
-        else{collection.showCollection();}
+        else{
+            collection.showCollection();
+        }
     }
     public void info(){
         String s = "Дата инициализации "+collection.getCurrentDate()+
                 ", Тип коллекции - HashMap, Кол-во элементов "+collection.getCountOfElements();
         console.print(s);
     }
-
+    public void remove_greater(String idstr){
+    Long id =validateId(idstr,false);
+    collection.removeElement(id);
+    console.print("Успешно удалено");
+    }
 }
 
 
