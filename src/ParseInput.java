@@ -19,34 +19,10 @@ private String[] arg3m;
         resetTheValues();
         String[] parts = s.split(" ");
 
-        if (parts.length > 3) {
-            throw new InvalidFormatExeption("Слишком много аргументов");
-        }
         try {
             arg1 = parts[0];
-            boolean found = false;
-            for (Comands comands : Comands.values()) {
-                if (arg1.equals(comands.name())) {
-                    found = true;
-                    break;
-                }
-            }
-
-            if (found == false) {
-                throw new InvalidFormatExeption("Неверная команда");
-            }
-
-
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new InvalidFormatExeption("Вы ничего не ввели");
-        } catch (IllegalArgumentException ignored) {
-        }
-        try {
             arg2 = parts[1];
             arg2IsNotEmpty=1;
-        } catch (ArrayIndexOutOfBoundsException e) {
-        }
-        try {
             arg3 = parts[2];
             countArg3AndNext = (int) arg3.chars().filter(ch -> ch == ';').count()+1;
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -64,11 +40,10 @@ private String[] arg3m;
     public String getArg1() {
         return arg1;
     }
-
     public String getArg2() {
         return arg2;
     }
     public String getArg3AndNext() {
-        return     arg3;
+        return arg3;
     }
 }

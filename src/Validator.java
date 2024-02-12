@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 public class Validator {
 
     public  Validator() {}
-    public boolean validate(String arg, TypesOfArgs type, boolean isCanBeNull)   {
+    public static boolean validate(String arg, TypesOfArgs type, boolean isCanBeNull)   {
         if (isCanBeNull && arg.isEmpty()){return true;}
         if (!isCanBeNull && arg.isEmpty()){return false;}
         if (type.getClas()==String.class ){return true;}
