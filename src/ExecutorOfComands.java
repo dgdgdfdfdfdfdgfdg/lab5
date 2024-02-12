@@ -82,11 +82,13 @@ public class ExecutorOfComands {
             throw new InvalidFormatExeption("Цена должна быть числом, не может быть null");
         }
         Long price =Long.parseLong( parts[1]);
-
+        Long discount= null;
         if (!Validator.validate(parts[2], TypesOfArgs.Long,true)){
             throw new InvalidFormatExeption("Скидка,если есть, должна быть числом");
         }
-        Long discount =Long.parseLong( parts[1]);
+        if (!parts[2].isEmpty()){
+            discount=Long.parseLong( parts[1]);
+        }
 
         if (!Validator.validate(parts[3], TypesOfArgs.Boolean,true)){
             throw new InvalidFormatExeption("Возможность возврата, если есть, должна быть \"true\" или \"false\"");
@@ -101,18 +103,19 @@ public class ExecutorOfComands {
         String[] coord = {};
         // считываем ticketType
 
-        String ticketType="";
+        String ticketTypeStr="";
         do {
             console.print("Введите тип билета из предложенных");
             for (TicketType type : TicketType.values()) {
                 console.print(type.name());
             }
-            ticketType= console.getInputFromCommand();
-            if (!Validator.validate(ticketType,TypesOfArgs.TicketType,false)){
+            ticketTypeStr= console.getInputFromCommand();
+            if (!Validator.validate(ticketTypeStr,TypesOfArgs.TicketType,false)){
                 console.print("Вы неверно ввели тип билета");
             }
         }
-        while (!Validator.validate(ticketType,TypesOfArgs.TicketType,false));
+        while (!Validator.validate(ticketTypeStr,TypesOfArgs.TicketType,false));
+        TicketType ticketType = TicketType.valueOf(ticketTypeStr.toUpperCase());
         Double x = null;
         long y = -1000;
         //считываем x и y
@@ -147,6 +150,7 @@ public class ExecutorOfComands {
             console.print("Введите Место встречи и вместимость через пробел или Место встречи");
             input = console.getInputFromCommand();
             ParseInput parser = new ParseInput();
+            parser.parseInput(input);
             if (parser.getCountArg3AndNext() != 0) {
                 console.print("Введено слишком много аргументов");
                 continue;
@@ -167,7 +171,7 @@ public class ExecutorOfComands {
             }
             input = console.getInputFromCommand();
             if (Validator.validate(input,TypesOfArgs.VenueType,false)){
-                venueType=VenueType.valueOf(input);
+                venueType=VenueType.valueOf(input.toUpperCase());
             }
             else if(input.isEmpty()){
                 break;
@@ -178,9 +182,11 @@ public class ExecutorOfComands {
         }
         Venue venue = new Venue(venueType, venueCapacity, venueName);
         Coordinates coordinates = new Coordinates(x, y);
-        Ticket ticket= new Ticket(name,coordinates,price,discount,refundable,TicketType.valueOf(ticketType),venue);
+        Ticket ticket= new Ticket(name,coordinates,price,discount,refundable,ticketType,venue);
         ticket.setId(id);
         collection.insertCollection(ticket);
+        collection.update();
+        System.out.println(DumpManager.convertToJson(collection.getHashMap()));
         console.print("Билет успешно введён");
     }
     public void removeKey(String idstr,String args) {

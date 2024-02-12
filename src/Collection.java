@@ -18,10 +18,9 @@ public class Collection {
         linkedList.clear();
     }
     public void insertCollection(Ticket ticket){
-
         hashMap.put(ticket.getId(),ticket);
         linkedList.add(ticket);
-        update();
+
     }
     public void showCollection() {
         for (Ticket ticket : linkedList) {

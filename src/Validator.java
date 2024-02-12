@@ -18,7 +18,7 @@ public class Validator {
         if (type.getClas()== TicketType.class ||type.getClas()== Comands.class||type.getClas()== VenueType.class ){
             arg=arg.toLowerCase();
             for (Object enumValue : type.getClas().getEnumConstants()) {
-               if (enumValue.toString().equalsIgnoreCase(arg)){
+               if (enumValue.toString().toLowerCase().equals(arg)){
                    return true;
                }
             }

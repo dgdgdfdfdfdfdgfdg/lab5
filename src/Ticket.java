@@ -1,4 +1,6 @@
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Ticket extends ElementsWithId implements Comparable<Ticket>{
@@ -12,6 +14,7 @@ public class Ticket extends ElementsWithId implements Comparable<Ticket>{
     private TicketType type; //Поле не может быть null
     private Venue venue; //Поле не может быть null
     private static final Counter counter=new Counter();
+
     public Ticket(String name,Coordinates coordinates,Long price,Long discount,Boolean refundable,TicketType type,Venue venue){
 
         this.id = counter.count();
@@ -76,7 +79,7 @@ public class Ticket extends ElementsWithId implements Comparable<Ticket>{
         return "id "+id+
                 ", name "+name+
                 ", coordinates "+getCoordinates().toString()+
-                ", creationDate "+creationDate.toInstant()+
+                ", creationDate "+ creationDate+
                 ", price " +price+
                 ", discount " +discount+
                 ", refundable " +refundable+
