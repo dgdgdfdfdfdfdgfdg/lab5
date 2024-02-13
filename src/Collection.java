@@ -45,23 +45,68 @@ public class Collection {
         arrayList.add(ticket);
         update();
     }
-    public void removeGreater(Long id){
-        for (Ticket ticket : arrayList){
-            if (ticket.getId()>id){
-                removeElement(ticket.getId());
+    public void removeGreater(Long price){
+        for (int i=0;i<arrayList.size();i++){
+            if (arrayList.get(i).getPrice()>price){
+                removeElement(arrayList.get(i).getId());
+                i--;
             }
         }
+
+    }
+    public void removeGreaterKey(Long id){
+        for (int i=0;i<arrayList.size();i++){
+            if (arrayList.get(i).getId()>id){
+                removeElement(arrayList.get(i).getId());
+                i--;
+            }
+        }
+    }
+    public void replaceIfGreater(Long id,Long price){
+        if (price>hashMap.get(id).getPrice()){
+            hashMap.get(id).setPrice(price);
+            for (Ticket ticket : arrayList){
+                if (ticket.getId().equals(id)){
+                    ticket.setPrice(price);
+                    return;
+                }
+            }
+           throw new  IllegalStateException("arrayList не имеет элемента с таким id, а hashmap имеет.");
+        }
+    }
+    public double getAveragePrice(){
+        double s = 0;
+        for (Ticket ticket : arrayList){
+            s+=ticket.getPrice();
+            }
+        s /= arrayList.size();
+        return s;
+    }
+    public ArrayList<Ticket> filterLessThanVenue(Long capacity){
+        ArrayList<Ticket> filtered = new ArrayList<Ticket>();
+        Long capacityOther;
+        for (Ticket ticket : arrayList){
+            if (ticket.getVenue().getCapacity()==null) {
+                capacityOther = -1L;
+            }else {
+                capacityOther=ticket.getVenue().getCapacity();
+            }
+            if (capacityOther<capacity){
+                filtered.add(ticket);
+            }
+        }
+        return filtered;
     }
 
     public  void removeElement(Long id){
         hashMap.remove(id);
-        for (Ticket ticket : arrayList){
-            if (ticket.getId()==id){
-                arrayList.remove(ticket);
+        for (int i=0;i<arrayList.size();i++){
+            if (arrayList.get(i).getId().equals(id)){
+                arrayList.remove(i);
                 return;
             }
         }
-        throw new IllegalStateException("arrayList не имеет элемента с таким id, а hashmap имеет.");
+            throw new IllegalStateException("arrayList не имеет элемента с таким id, а hashmap имеет.");
     }
 public void update(){
     Collections.sort(arrayList);
@@ -70,7 +115,7 @@ public void update(){
         return hashMap;
     }
 
-    public ArrayList<Ticket> arrayListgetArrayList() {return arrayList;}
+    public ArrayList<Ticket> getArrayList() {return arrayList;}
 
     public Date getCurrentDate() {
         return currentDate;

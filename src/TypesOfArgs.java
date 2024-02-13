@@ -5,6 +5,7 @@ public enum TypesOfArgs {
     String(String.class),
     Boolean(Boolean.class),
     Command(Comands.class),
+    HelpCommand(HelpComands.class),
     VenueType(VenueType.class),
     TicketType(TicketType.class);
     private Class<?> clas;

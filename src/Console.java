@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Console {
     private  Scanner fileScanner = null;
-    private  Scanner defScanner = new Scanner(System.in);
+    private    Scanner defScanner = new Scanner(System.in);
     private  Scanner scanner;
 
 
@@ -20,7 +20,11 @@ public class Console {
         if (scanner.hasNextLine()) {
             input = scanner.nextLine();
         }
-        return input;
+
+        if (input!=null) return input;
+        selectConsoleScanner();
+        print("Чтение файла окончено");
+        return  getInput();
     }
     private void  goToMenu(){
         throw new InvalidFormatExeption("Операция отменена");
@@ -38,7 +42,7 @@ public class Console {
         if (fileScanner==null){
             scanner=defScanner;
         }else {
-            scanner =defScanner;
+            scanner =fileScanner;
         }
     }
     public void selectFileScanner(Scanner scanner) {

@@ -1,4 +1,4 @@
-public class Venue extends ElementsWithId{
+public class Venue extends ElementsWithId  {
     private Long id;
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Long capacity; //Поле может быть null, Значение поля должно быть больше 0
@@ -17,12 +17,16 @@ public class Venue extends ElementsWithId{
                 ", venueType "+type+
                 ", venueId " + id+
                 ", venueCapacity " + capacity;
-
-
     }
     @Override
     public Long getId() {
         return id;
     }
+
+
+    public Long getCapacity() {
+        return capacity;
+    }
+
 
 }

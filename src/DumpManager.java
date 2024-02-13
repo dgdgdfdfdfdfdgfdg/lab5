@@ -34,7 +34,7 @@ import java.util.Scanner;
         public static void saveToFile(Collection collection){
             String json = DumpManager.convertToJson(collection.getHashMap());
             // Путь к файлу, который нужно перезаписать
-            String filePath = "file.json";
+            String filePath = System.getenv("FILE_PATH");
 
             try (FileOutputStream fos = new FileOutputStream(filePath)) {
                 // Преобразование строки в массив байтов

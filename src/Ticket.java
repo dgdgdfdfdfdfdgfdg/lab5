@@ -44,6 +44,7 @@ public class Ticket extends ElementsWithId implements Comparable<Ticket>{
         this.venue=venue;
     }
 
+
     public Boolean getRefundable() {
         return refundable;
     }
@@ -79,9 +80,14 @@ public class Ticket extends ElementsWithId implements Comparable<Ticket>{
     public void setId(Long id){
         this.id = id;
     }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
     @Override
     public int compareTo(Ticket other){
-        return (int) (id - other.getId());
+        return (int) (price - other.getPrice());
 
     }
     @Override

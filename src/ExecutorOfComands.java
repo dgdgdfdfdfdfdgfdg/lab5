@@ -1,9 +1,10 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.lang.reflect.Method;
-public class ExecutorOfComands {
+public class ExecutorOfComands implements AbleToExecute {
     private final Console console;
     private Collection collection;
     public ExecutorOfComands(Collection collection,Console console){
@@ -182,8 +183,11 @@ public class ExecutorOfComands {
             throw new InvalidFormatExeption("Id должен быть числом");
         }
         Long id = Long.parseLong(idstr);
+        if (id<=0){
+            throw new InvalidFormatExeption("Id должен быть больше нуля");
+        }
         String ne = mustBeUnique ? "" :" не";
-        if (!(mustBeUnique ^ collection.getHashMap().containsKey(id))) {
+        if (mustBeUnique == collection.getHashMap().containsKey(id)) {
             throw new InvalidFormatExeption("Неправильный формат ввода id"+ne +" должен быть уникальным");
         }
         return Long.parseLong(idstr);
@@ -230,10 +234,80 @@ public class ExecutorOfComands {
                 ", Тип коллекции - HashMap, Кол-во элементов "+collection.getCountOfElements();
         console.print(s);
     }
-    public void remove_greater(String idstr){
+    public void remove_greater(String priceStr){
+        if (!Validator.validate(priceStr,TypesOfArgs.Long,false)){
+            throw new InvalidFormatExeption("Цена должна быть числом");
+        }
+        Long price = Long.parseLong(priceStr);
+        if (price<=0){
+            throw new InvalidFormatExeption("Цена должна быть положительной");
+        }
+        collection.removeGreater(price);
+        console.print("Удалено успешно");
+    }
+    public void remove_greater_key(String idstr){
     Long id =validateId(idstr,false);
-    collection.removeElement(id);
-    console.print("Успешно удалено");
+    int sizeBefore = collection.getCountOfElements();
+    collection.removeGreaterKey(id);
+    int sizeAfter = collection.getCountOfElements();
+        if (sizeAfter != sizeBefore) {
+            console.print("Успешно удалено");
+        }else {
+            console.print("Нет таких элементов");
+        }
+    }
+    public void average_of_price(){
+        console.print("Средняя цена "+collection.getAveragePrice());
+    }
+    public void print_descending(){
+        for (int i=collection.getArrayList().size()-1;i>=0;i--){
+            console.print(collection.getArrayList().get(i).toString());
+        }
+    }
+    public void execute_script(String filename){
+        try {
+            Scanner scanner = new Scanner(new File(filename));
+            console.selectFileScanner(scanner);
+        } catch (FileNotFoundException e) {
+            throw new InvalidFormatExeption("Нет такого файла");
+        }catch (SecurityException e){
+            throw new InvalidFormatExeption("Нет прав доступа");
+        }
+    }
+    public void replace_if_greater(String idstr,String priceStr){
+        validateId(idstr,false);
+                Long id = Long.parseLong(idstr);
+        if (!Validator.validate(priceStr,TypesOfArgs.Long,false)){
+            throw new InvalidFormatExeption("Цена должна быть числом");
+        }
+        Long price = Long.parseLong(priceStr);
+        if (price<=0){
+            throw new InvalidFormatExeption("Цена должна быть больше нуля");
+        }
+        Long priceBefore=collection.getElement(id).getPrice();
+        collection.replaceIfGreater(id,price);
+        Long priceAfter = collection.getElement(id).getPrice();
+        if (priceAfter.equals(priceBefore)){
+            console.print("Операция прошла успешно. Замена не произошла");
+        }
+        else {
+            console.print("Операция прошла успешно. Замена произошла");
+        }
+
+    }
+    //если у каких-то билетов capacity=null то они в любом случае выписываются
+    public void filter_less_than_venue(String capacityStr){
+        if (!Validator.validate(capacityStr,TypesOfArgs.Long,true)){
+            throw new InvalidFormatExeption("Вместимость должна быть числом");
+        }
+        Long capacity= Long.parseLong(capacityStr);
+        ArrayList<Ticket> filtered = collection.filterLessThanVenue(capacity);
+        if (filtered.isEmpty()){
+            console.print("Нет таких элементов");
+        }
+        for (Ticket ticket : filtered){
+            console.print(ticket.toString());
+        }
     }
 }
 

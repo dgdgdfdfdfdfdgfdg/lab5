@@ -10,7 +10,7 @@ public enum Comands {
     execute_script(1),
     exit(0),
     remove_greater(1),
-    replace_if_greater(5),
+    replace_if_greater(2),
     remove_greater_key(1),
     average_of_price(0),
     filter_less_than_venue(1),

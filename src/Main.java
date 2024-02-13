@@ -17,6 +17,12 @@ public class Main {
                 try {
                     parseInput.parseInput(s);
                     String cmd = parseInput.getArg1();
+
+                    if (Validator.validate(cmd,TypesOfArgs.HelpCommand,false)){
+                        console.print(HelpComands.valueOf(cmd).getMessage());
+                        continue;
+                    }
+
                     if (!Validator.validate(cmd,TypesOfArgs.Command,false)) {
                         throw new InvalidFormatExeption("Неверная команда");
                     }
