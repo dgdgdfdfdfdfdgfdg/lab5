@@ -87,7 +87,7 @@ public class Ticket extends ElementsWithId implements Comparable<Ticket>{
 
     @Override
     public int compareTo(Ticket other){
-        return (int) (price - other.getPrice());
+        return (int) (id - other.getId());
 
     }
     @Override
