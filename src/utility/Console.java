@@ -1,5 +1,13 @@
-import com.sun.jdi.Value;
+package utility;
 
+import com.sun.jdi.Value;
+import commands.Execute_Script;
+import dto.TicketType;
+import dto.VenueType;
+import utility.*;
+
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Console {
@@ -22,21 +30,33 @@ public class Console {
         }
 
         if (input!=null) return input;
-        selectConsoleScanner();
-        print("Чтение файла окончено");
+        ArrayList stack = Execute_Script.getStack();
+        print("Чтение файла "+stack.get(stack.size()-1)+" окончено");
+        stack.remove(stack.size()-1);
+        Execute_Script.setStack(stack);
+
+        if (stack.isEmpty()){
+            selectConsoleScanner();
+        }
         return  getInput();
     }
     private void  goToMenu(){
         throw new InvalidFormatExeption("Операция отменена");
     }
-    public String getInputFromCommand(){
+    public String getInputFromCommand(int minCountOfArgs,int maxCountOfArgs){
         this.print("Для отмены операции введите /");
         String input = this.getInput();
         if (input.equals("/")){
             goToMenu();
         }
+        int countOfArgs = input.split(" ",-1).length ;
+        if (countOfArgs < minCountOfArgs || countOfArgs>maxCountOfArgs ){
+            print("Неверное число аргументов");
+            return getInputFromCommand(minCountOfArgs,maxCountOfArgs);
+        }
         return input;
     }
+
 
     public void checkScanner(){
         if (fileScanner==null){

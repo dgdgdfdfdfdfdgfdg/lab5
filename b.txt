@@ -1,0 +1,4 @@
+info
+execute_script b.txt
+execute_script a.txt
+help

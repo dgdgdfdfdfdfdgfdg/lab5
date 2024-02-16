@@ -1,10 +1,11 @@
+package dto;
+
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Ticket extends ElementsWithId implements Comparable<Ticket>{
-    private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
     private java.util.Date creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
@@ -13,11 +14,9 @@ public class Ticket extends ElementsWithId implements Comparable<Ticket>{
     private Boolean refundable; //Поле может быть null
     private TicketType type; //Поле не может быть null
     private Venue venue; //Поле не может быть null
-    private static final Counter counter=new Counter();
     //конструктор с датой
     public Ticket(String name,Coordinates coordinates,Long price,Long discount,Boolean refundable,TicketType type,Venue venue){
-
-        this.id = counter.count();
+        this.id = getFreeId(instancesTicket);
         this.name= name;
         this.coordinates=coordinates;
         Date currentDate = new Date();
@@ -29,12 +28,12 @@ public class Ticket extends ElementsWithId implements Comparable<Ticket>{
         this.venue=venue;
     }
 
-
+    {instancesTicket.add(this);}
 
         //конструктор без даты
-    public Ticket(String name,Coordinates coordinates,Date creationDate,Long price,Long discount,Boolean refundable,TicketType type,Venue venue){
-        this.id = counter.count();
+    public Ticket(Long id,String name,Coordinates coordinates,Date creationDate,Long price,Long discount,Boolean refundable,TicketType type,Venue venue){
         this.name= name;
+        this.id = id;
         this.coordinates=coordinates;
         this.creationDate =creationDate;
         this.price=price;
@@ -87,13 +86,10 @@ public class Ticket extends ElementsWithId implements Comparable<Ticket>{
 
     @Override
     public int compareTo(Ticket other){
-        return (int) (id - other.getId());
+        return (int) (price - other.getPrice());
 
     }
-    @Override
-    public Long getId() {
-        return id;
-    }
+
 
     @Override
     public String toString(){

@@ -1,5 +1,3 @@
-insert 31 dsfds;324;234;
-vip
-32 2
-sdfsd
-bar
+
+execute_script a.txt
+help

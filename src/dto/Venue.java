@@ -1,16 +1,25 @@
+package dto;
+
 public class Venue extends ElementsWithId  {
-    private Long id;
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Long capacity; //Поле может быть null, Значение поля должно быть больше 0
     private VenueType type; //Поле может быть null
-    private static final Counter counter=new Counter();
 
     public Venue(VenueType type,Long capacity,String name) {
+        this.id = getFreeId(instancesVenue);
         this.type = type;
         this.capacity=capacity;
         this.name = name;
-        this.id = counter.count();
     }
+    {instancesVenue.add(this);}
+    public Venue(VenueType type,Long capacity,String name,Long id) {
+        this.id = id;
+        this.type = type;
+        this.capacity=capacity;
+        this.name = name;
+    }
+
+
     @Override
     public String toString(){
         return  "venueName " + name+
@@ -18,10 +27,7 @@ public class Venue extends ElementsWithId  {
                 ", venueId " + id+
                 ", venueCapacity " + capacity;
     }
-    @Override
-    public Long getId() {
-        return id;
-    }
+
 
 
     public Long getCapacity() {

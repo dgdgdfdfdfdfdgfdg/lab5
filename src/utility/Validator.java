@@ -1,3 +1,8 @@
+package utility;
+
+import dto.TicketType;
+import dto.VenueType;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -15,7 +20,7 @@ public class Validator {
         Class<?>[] parameterTypes = {String.class};
         Method method = null;
         //если это мой класс enum
-        if (type.getClas()== TicketType.class ||type.getClas()== Comands.class||type.getClas()== VenueType.class ||type.getClas()== HelpComands.class){
+        if (type.getClas()== TicketType.class ||type.getClas()== Comands.class||type.getClas()== VenueType.class ){
             arg=arg.toLowerCase();
             for (Object enumValue : type.getClas().getEnumConstants()) {
                if (enumValue.toString().toLowerCase().equals(arg)){
